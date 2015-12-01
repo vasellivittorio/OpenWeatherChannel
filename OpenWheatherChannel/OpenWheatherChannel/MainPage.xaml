@@ -6,9 +6,46 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="#1199cc">
 
     <Grid>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="DefaultState"/>
+                <VisualState x:Name="LoadingCity">
+                    <VisualState.Storyboard>
+                        <Storyboard >
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="cityProgressRing" Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"></DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="currentCityLabel" Storyboard.TargetProperty="Text">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="Loading..."></DiscreteObjectKeyFrame>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState.Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+                
+        </VisualStateManager.VisualStateGroups>
+            
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="currentCityLabel" VerticalAlignment="Center" FontSize="80" TextAlignment="Center" Grid.ColumnSpan="2" />
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+            <Image x:Name="WeaterImage" HorizontalAlignment="Center" />
+            <TextBlock x:Name="currentWeatherLabel"  FontSize="24" TextAlignment="Center" VerticalAlignment="Top"/>
+        </StackPanel>
+        <TextBlock x:Name="currentTempLabel" Grid.Row="1" Grid.RowSpan="2" FontSize="70" TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" />
+       
+        <ProgressRing x:Name="cityProgressRing" Visibility="Collapsed" IsActive="True" Background="Transparent" Foreground="White" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Page>

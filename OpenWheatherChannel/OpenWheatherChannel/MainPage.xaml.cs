@@ -12,6 +12,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using OpenWheatherChannel.Classes;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Media.Imaging;
 
 // Il modello di elemento per la pagina vuota è documentato all'indirizzo http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -25,9 +28,30 @@ namespace OpenWheatherChannel
         public MainPage()
         {
             this.InitializeComponent();
-
+            Loaded += PageLoaded;
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
+
+        private async void PageLoaded(object sender, RoutedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, "LoadingCity", true);
+            var position = await new GeoLocation().GetCurrentGeoCoordinates();
+            var data = await new WebServices().GetCurrentWheatherByGeoCoordinates(position.Latitude, position.Longitude);
+            if(data == null)
+            {
+                var dialog = new MessageDialog("Cannot receive data", "Error");
+                await dialog.ShowAsync();
+            }
+            VisualStateManager.GoToState(this, "DefaultState", true);
+
+            WeaterImage.Source = new BitmapImage(new Uri(String.Format("http://openweathermap.org/img/w/{0}.png", data.weather.First().icon)));
+            currentCityLabel.Text = data.name;
+            currentTempLabel.Text = data.Temperature;
+            currentWeatherLabel.Text = data.weather.First().main;
+
+        }
+
+        
 
         /// <summary>
         /// Richiamato quando la pagina sta per essere visualizzata in un Frame.

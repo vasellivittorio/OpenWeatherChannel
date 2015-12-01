@@ -11,13 +11,14 @@ namespace OpenWheatherChannel.Classes
 {
     class WebServices
     {
-        public string CURRENTWEATHERBYGEOCOORDINATES = "api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}";
+        private string appid = "e0985bfa3a9b3c04c582df36689d51f8";
+        private string CURRENTWEATHERBYGEOCOORDINATES = "http://api.openweathermap.org/data/2.5/weather?lat={0}&lon={1}&appid={2}";
 
         public async Task<WeatherResponse> GetCurrentWheatherByGeoCoordinates(double lat, double lon)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Post, new Uri(String.Format(CURRENTWEATHERBYGEOCOORDINATES, lat, lon)));
+                var request = new HttpRequestMessage(HttpMethod.Post, new Uri(String.Format(CURRENTWEATHERBYGEOCOORDINATES, lat, lon, appid)));
                 var httpResponse = await new HttpClient().SendRequestAsync(request);
                 httpResponse.EnsureSuccessStatusCode();
                 var response = await httpResponse.Content.ReadAsStringAsync();
